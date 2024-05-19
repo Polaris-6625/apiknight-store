@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { store } from './store/store';
+import React from 'react';
 import Action from './Action';
 import { numStore } from './store/num';
-import { useSelector } from '../src/index';
+import { useMapperSelector, useSelector } from '../src/index';
+import { mapperNumStore } from './store/mapperDemo';
 
 
 const MainPage: React.FC = () => {
-  // store.subscribe(() => console.log(store.getState()));
-  // numStore.subscribe(() => console.log(numStore.getState()));
   const numStoreValue = useSelector(numStore,state => state);
-
+  const numStoreValue2 = useMapperSelector<number,number>(mapperNumStore,1,state => state);
   console.log('numStoreValue',numStoreValue);
+  console.log('numStoreValue2',numStoreValue2);
   return (
     <>
       <div>xxx</div>
       <Action />
+      {numStoreValue}
+      {numStoreValue2}
     </>
   );
 };

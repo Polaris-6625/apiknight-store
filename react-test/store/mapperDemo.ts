@@ -1,4 +1,4 @@
-import { createStore } from "../../src/index";
+import { createMapperStore } from "../../src/index";
 
 const initState = 0;
 
@@ -11,6 +11,6 @@ function reducer(state = initState, action) {
   }
 }
 
-const numStore = createStore(reducer,initState);
+const mapperNumStore = createMapperStore<number,number>({params: 1,result: initState}, reducer);
 
-export {numStore};
+export {mapperNumStore};

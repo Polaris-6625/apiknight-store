@@ -1,18 +1,19 @@
 import React from "react";
-import { store } from "./store/store";
 import { numStore } from "./store/num";
 import { useCallback } from "react";
+import { mapperNumStore } from "./store/mapperDemo";
 
 function Action() {
-    // store.dispatch({ type: 'PUT_MILK',count: 1 });    // milk: 1
-    // store.dispatch({ type: 'PUT_MILK',count: 1  });    // milk: 2
-    // store.dispatch({ type: 'TAKE_MILK',count: 1  });   // milk: 1
     const add = useCallback(() => {
         numStore.dispatch({type: 'add',count: 1});
+    },[numStore])
+    const add2 = useCallback(() => {
+        mapperNumStore.dispatch(1,{type: 'add',count: 2});
     },[numStore])
     return (
         <div>
             <button onClick={add}>action</button>
+            <button onClick={add2}>Mapper Action</button>
         </div>
     )
 }

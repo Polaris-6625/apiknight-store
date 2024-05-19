@@ -15,6 +15,6 @@ function reducer(state = initState, action: any) {
     }
 }
 
-let store = createStore(reducer);
+let store = createStore(reducer,initState);
 
 export {store}
