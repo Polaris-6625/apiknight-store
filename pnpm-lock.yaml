@@ -30,8 +30,8 @@ dependencies:
     specifier: ^4.17.21
     version: 4.17.21
   lyy-store:
-    specifier: ^1.0.2
-    version: 1.0.2(less@4.2.0)(typescript@5.4.5)(webpack-cli@5.1.4)(webpack@5.91.0)
+    specifier: ^1.0.3
+    version: 1.0.3(less@4.2.0)(typescript@5.4.5)(webpack-cli@5.1.4)(webpack@5.91.0)
   react:
     specifier: ^18.2.0
     version: 18.3.1
@@ -3254,8 +3254,8 @@ packages:
       yallist: 3.1.1
     dev: true
 
-  /lyy-store@1.0.2(less@4.2.0)(typescript@5.4.5)(webpack-cli@5.1.4)(webpack@5.91.0):
-    resolution: {integrity: sha512-FLxIHt51wZcAO3xc9fHikgrsBrV0ewz96tN5AqfgpujoGwDxSHHZg7Oc3kKoD6yGANZdJGM9RUKDHxt2kvr++Q==}
+  /lyy-store@1.0.3(less@4.2.0)(typescript@5.4.5)(webpack-cli@5.1.4)(webpack@5.91.0):
+    resolution: {integrity: sha512-ExaaKZ2TpWZK4T397NJzvIbK0MnKaIXUDxHjdCYcd9EsDFRO445M3JOl33e5hUpWI7iR3e4z1XNWn68Tk42Pag==}
     dependencies:
       '@types/react': 18.3.2
       '@types/react-dom': 18.3.0

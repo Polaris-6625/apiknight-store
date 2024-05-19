@@ -1,4 +1,4 @@
-import { createStore } from "../../src/index";
+import { createStore } from "lyy-store/lib/index";
 
 const initState = 0;
 

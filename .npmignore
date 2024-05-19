@@ -13,3 +13,4 @@ vue.dev.config.js
 webpack.config.js
 rollup.config.js
 index.html
+tsconfig.json
