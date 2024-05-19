@@ -1,4 +1,4 @@
-import { createStore } from "../src";
+import { createStore } from "../../src/index";
 
 const initState = {
     milk: 0

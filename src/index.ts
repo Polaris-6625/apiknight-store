@@ -1,11 +1,17 @@
-import { Func } from "./type";
+import { useEffect, useRef, useState } from "react";
+import { Func, StoreType } from "./type";
 
-function createStore<T = any>(reducer: Func) {
+function createStore<T = any>(reducer: Func): StoreType<T> {
     let state: T | null;
     let listeners: Func[] = [];
 
     function subscribe(callback: Func) {
         listeners.push(callback);
+    }
+
+    function unloadScribe(func: Func) {
+        const index = listeners.indexOf(func);
+        listeners.splice(index, 1);
     }
 
     function dispatch(action: any) {
@@ -23,9 +29,27 @@ function createStore<T = any>(reducer: Func) {
         subscribe,
         dispatch,
         getState,
+        unloadScribe
     }
 
     return store;
 }
 
-export { createStore }
+const useSelector = (store: StoreType, selector: Func) => {
+    const [selectedState, setSelectedState] = useState(() => selector(store.getState()));
+
+    useEffect(() => {
+        const callback = () => {
+            setSelectedState(selector(store.getState()));
+        };
+        store.subscribe(callback);
+
+        return () => {
+            store.unloadScribe(callback)
+        };
+    }, [store]);
+
+    return selectedState;
+};
+
+export { createStore , useSelector }
