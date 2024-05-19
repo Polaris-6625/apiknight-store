@@ -58,16 +58,16 @@ function createMapperStore<Params = any,Result = any>(
 ) {
     const map = new Map<Params,{result:Result,listeners: Func[]}>();
     let listeners: Func[] = [];
-    map.set(params, {result,listeners});
+    map.set(params, {result: result as Result,listeners});
     function subscribe(key: Params,callback: Func) {
         map.get(key)?.listeners?.push(callback);
     }
     function unSubscribe(key: Params,func: Func) {
         const index = map.get(key)?.listeners?.indexOf(func);
-        map.get(key)?.listeners?.splice(index, 1);
+        map.get(key)?.listeners?.splice(index as number, 1);
     }
     function dispatch(key: Params,action: any) {
-        const state = map.get(key);
+        const state = map.get(key) as {result:Result,listeners: Func[]};
         state.result = reducer(state?.result, action)
         state?.listeners?.forEach(listener => {
             listener();
