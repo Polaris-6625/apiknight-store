@@ -6,13 +6,21 @@
 
 ## 文档
 
+### 安装
+
+```bash
+
+npm install @apiknight/store --save
+
+```
+
 ### 使用方式一
 
 通过 `createStore` 创建 store:
 
 ```ts
 
-import { createStore } from "lyy-store/lib/index";
+import { createStore } from "@apiknight/store/lib/index";
 
 const initState = 0;
 
@@ -55,7 +63,7 @@ const numStoreValue = useSelector(numStore,state => state);
 
 ```tsx
 
-import { createMapperStore } from "lyy-store/lib/index";
+import { createMapperStore } from "@apiknight/store/lib/index";
 
 const initState = 0;
 
