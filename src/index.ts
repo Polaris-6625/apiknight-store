@@ -15,10 +15,10 @@ function createStore<T = any>(reducer: Func,initState?: T): StoreType<T> {
     }
 
     function dispatch(action: any) {
-        state = reducer(state, action)
+        state = reducer(state, action);
         listeners?.forEach(listener => {
             listener();
-        })
+        });
     }
 
     function getState() {
@@ -66,12 +66,16 @@ function createMapperStore<Params = any,Result = any>(
         const index = map.get(key)?.listeners?.indexOf(func);
         map.get(key)?.listeners?.splice(index as number, 1);
     }
-    function dispatch(key: Params,action: any) {
-        const state = map.get(key) as {result:Result,listeners: Func[]};
-        state.result = reducer(state?.result, action)
-        state?.listeners?.forEach(listener => {
-            listener();
-        })
+    function dispatch(key: Params, action: any) {
+        const stateEntry = map.get(key);
+        if (stateEntry) {
+            stateEntry.result = reducer(stateEntry.result, action);
+            stateEntry.listeners.forEach(listener => {
+                listener();
+            });
+        } else {
+            console.warn(`Key ${key} does not exist in the store.`);
+        }
     }
     function getState(key: Params) {
         return map.get(key)?.result;

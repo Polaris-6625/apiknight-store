@@ -29,9 +29,6 @@ dependencies:
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
-  lyy-store:
-    specifier: ^1.0.3
-    version: 1.0.3(less@4.2.0)(typescript@5.4.5)(webpack-cli@5.1.4)(webpack@5.91.0)
   react:
     specifier: ^18.2.0
     version: 18.3.1
@@ -3253,35 +3250,6 @@ packages:
     dependencies:
       yallist: 3.1.1
     dev: true
-
-  /lyy-store@1.0.3(less@4.2.0)(typescript@5.4.5)(webpack-cli@5.1.4)(webpack@5.91.0):
-    resolution: {integrity: sha512-ExaaKZ2TpWZK4T397NJzvIbK0MnKaIXUDxHjdCYcd9EsDFRO445M3JOl33e5hUpWI7iR3e4z1XNWn68Tk42Pag==}
-    dependencies:
-      '@types/react': 18.3.2
-      '@types/react-dom': 18.3.0
-      '@vue/runtime-dom': 3.4.27
-      babel-preset-react: 6.24.1
-      css-loader: 6.11.0(webpack@5.91.0)
-      i: 0.3.7
-      less-loader: 11.1.4(less@4.2.0)(webpack@5.91.0)
-      lodash: 4.17.21
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      style-loader: 3.3.4(webpack@5.91.0)
-      styled-components: 6.1.11(react-dom@18.3.1)(react@18.3.1)
-      ts-loader: 9.5.1(typescript@5.4.5)(webpack@5.91.0)
-      webpack-dev-server: 4.15.2(webpack-cli@5.1.4)(webpack@5.91.0)
-    transitivePeerDependencies:
-      - '@rspack/core'
-      - bufferutil
-      - debug
-      - less
-      - supports-color
-      - typescript
-      - utf-8-validate
-      - webpack
-      - webpack-cli
-    dev: false
 
   /magic-string@0.30.10:
     resolution: {integrity: sha512-iIRwTIf0QKV3UAnYK4PU8uiEc4SRh5jX0mwpIwETPpHdhVM4f53RSwS/vXvN1JhGX+Cs7B8qIq3d6AH49O5fAQ==}
