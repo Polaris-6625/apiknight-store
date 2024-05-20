@@ -1,5 +1,5 @@
 {
-  "name": "@lyy/store",
+  "name": "@apiknight/store",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx webpack serve --mode development",
     "prod": "npx webpack serve --mdoe production",
-    "build": "pnpm run build:prod",
+    "build": "rm -rf ./lib && tsc",
     "build:prod": "npx webpack --mode production",
     "build:dev": "npx webpack --mode development",
     "pre": "npx webpack serve --mode production --open",
