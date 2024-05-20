@@ -1,0 +1,4 @@
+packages:
+  - test-vue
+  - test-react
+  - store
