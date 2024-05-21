@@ -34,7 +34,7 @@ function reducer(state = initState, action: any) {
   }
 }
 
-const numStore = createStore<number>(reducer,initState);
+const numStore = createStore<number>(reducer);
 
 export {numStore};
 

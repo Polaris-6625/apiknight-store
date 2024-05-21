@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Func, StoreType } from "./type";
 
-function createStore<T = any>(reducer: Func,initState?: T): StoreType<T> {
-    let state: T | undefined = initState;
+function createStore<T = any>(reducer: Func): StoreType<T> {
+    let state: T | undefined = void 0;
     let listeners: Func[] = [];
     let isDispatching = false;
     function subscribe(callback: Func) {
