@@ -7,14 +7,14 @@ function createStore<T = any>(reducer: Func): StoreType<T> {
     let isDispatching = false;
     function subscribe(callback: Func) {
         if (isDispatching) {
-            throw new Error("Reducers may not dispatch actions.");
+            throw new Error("Reducer此时不得派发动作。");
         }
         listeners.push(callback);
     }
 
     function unSubscribe(func: Func) {
         if (isDispatching) {
-            throw new Error("Reducers may not dispatch actions.");
+            throw new Error("Reducer此时不得派发动作。");
         }
         const index = listeners.indexOf(func);
         listeners.splice(index, 1);
@@ -41,7 +41,7 @@ function createStore<T = any>(reducer: Func): StoreType<T> {
 
     function getState() {
         if (isDispatching) {
-            throw new Error("Reducers may not dispatch actions.");
+            throw new Error("Reducer此时不得派发动作。");
         }
         return state;
     }
@@ -95,7 +95,7 @@ function createMapperStore<Params = any,Result = any>(
                 listener();
             });
         } else {
-            console.warn(`Key ${key} does not exist in the store.`);
+            console.warn(`Key ${key} 不存在于此store中。`);
         }
     }
     function getState(key: Params) {
