@@ -39,6 +39,50 @@ function createStore<T = any>(reducer: Func): StoreType<T> {
         });
     }
 
+    function dispatchState(value: T | Func) {
+        if (isDispatching) {
+            throw new Error("Reducers may not dispatch actions.");
+        }
+        try {
+            if (typeof state === "function") {
+                state = (value as Func)();
+                isDispatching = true;
+            }
+            else {
+                state = reducer(value);
+                isDispatching = true;
+            }
+        }
+        catch (error) {
+            throw error;
+        }
+        finally {
+            isDispatching = false;
+        }
+        listeners?.forEach(listener => {
+            listener();
+        });
+    }
+
+    function dispatchSlice(newReducer: Func) {
+        if (isDispatching) {
+            throw new Error("Reducers may not dispatch actions.");
+        }
+        try {
+            state = newReducer(state);
+            isDispatching = true;
+        }
+        catch (error) {
+            throw error;
+        }
+        finally {
+            isDispatching = false;
+        }
+        listeners?.forEach(listener => {
+            listener();
+        });
+    }
+
     function getState() {
         if (isDispatching) {
             throw new Error("Reducer此时不得派发动作。");
@@ -46,11 +90,23 @@ function createStore<T = any>(reducer: Func): StoreType<T> {
         return state;
     }
 
+    function getIsDispatching() {
+        return isDispatching;
+    }
+
+    function setIsDispatching(dispatchState: boolean) {
+        isDispatching = dispatchState
+    }
+
     const store = {
         subscribe,
         dispatch,
         getState,
-        unSubscribe
+        unSubscribe,
+        getIsDispatching,
+        setIsDispatching,
+        dispatchState,
+        dispatchSlice
     }
 
     return store;
@@ -121,7 +177,9 @@ const useMapperSelector = <Params = any,Result = any>(store: any, key: Params, s
             store.unSubscribe(key, callback);
         };
     }, [store, key]); // 添加 key 到依赖数组中
+
     return selectedState;
 };
+
 
 export { createStore , useSelector , createMapperStore , useMapperSelector }
