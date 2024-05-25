@@ -1,6 +1,6 @@
-export type Func = (...args: any[]) => any;
+export type Func<T = any> = (...args: T[]) => any;
 
-export type Action = <T = any, V = any>(...args: T[]) => V;
+export type Action<T = any, V = any> = (...args: T[]) => V;
 export interface StoreType<T = any> {
     subscribe: (callback: Func) => void;
     dispatch: (action?: any) => void;
@@ -10,4 +10,13 @@ export interface StoreType<T = any> {
     getIsDispatching: () => boolean;
     setIsDispatching: (e: boolean) => void;
     dispatchSlice: (slice: Func) => void;
+}
+export interface HooksStoreType<T = any> {
+    useStoreValue: () => T;
+    setStoreValue: { (value: T | undefined): void; (func: Func<T>): void; }
+    loadStoreValue: (func: Action) => void;
+    getStoreValue: () => T;
+    useStoreLoading: () => boolean;
+    getStoreLoading: () => boolean;
+    reset: () => void;
 }

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react"
-import { Action, Func } from "./type"
+import { Action, Func, HooksStoreType } from "./type"
 import { createStore, useSelector } from "./index"
 
-const createMapperHooksStore = <Result>(initValue?: Result,options?: any) => {
+const createMapperHooksStore = <Result>(initValue?: Result,options?: any): HooksStoreType<Result> => {
 
     const store = createStore(e => e)
     
@@ -11,13 +11,13 @@ const createMapperHooksStore = <Result>(initValue?: Result,options?: any) => {
         return storeValue
     }
     function setStoreValue(value: Result | undefined): void
-    function setStoreValue(func: Func): void
-    function setStoreValue(value: Result | Func | undefined) {
+    function setStoreValue(func: Func<Result>): void
+    function setStoreValue(value: Result | Func<Result> | undefined) {
         if (typeof value === 'function') {
             store.setIsDispatching(true)
             try {
                 store.setIsDispatching(false)
-                store.dispatchSlice((value as Func))
+                store.dispatchSlice((value as Func<Result>))
             }
             catch (error: any) {
                 throw new Error(error)
