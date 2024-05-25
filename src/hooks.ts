@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { Action, Func, HooksStoreType } from "./type"
 import { createStore, useSelector } from "./index"
 
@@ -45,10 +45,10 @@ const createMapperHooksStore = <Result>(initValue?: Result,options?: any): Hooks
         setStoreValue(initValue)
     }
 
-    function loadStoreValue(func: Action) {
+    function loadStoreValue(func: Action<Result,Promise<Result>>) {
         store.setIsDispatching(true)
         try {
-            func().then((value: Result) => {
+            func().then((value) => {
                 store.setIsDispatching(false)
                 setStoreValue(value)
             })
