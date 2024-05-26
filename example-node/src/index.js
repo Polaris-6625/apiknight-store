@@ -10,7 +10,7 @@ const delay = (ms) => new Promise((resolve, reject) => {
 })
 
 app.get("/", async (req, res) => {
-    await delay(1000)
+    await delay(5000)
     res.send(req.query)
 })
 

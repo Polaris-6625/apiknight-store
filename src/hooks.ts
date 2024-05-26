@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import { Action, Func, HooksStoreType } from "./type"
+import { Action, Func, HooksStoreType, Options } from "./type"
 import { createStore, useSelector } from "./index"
 
-const createMapperHooksStore = <Result>(initValue?: Result,options?: any): HooksStoreType<Result> => {
+const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): HooksStoreType<Result> => {
 
     const store = createStore(e => e)
     

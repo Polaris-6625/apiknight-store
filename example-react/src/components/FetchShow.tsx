@@ -7,6 +7,7 @@ function FetchShow() {
         loadStrRes()
     },[])
     const loading = useLoading()
+    console.log("loading", loading)
     return (
         <div>
             {

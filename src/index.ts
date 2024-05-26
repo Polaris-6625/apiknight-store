@@ -95,7 +95,7 @@ function createStore<T = any>(reducer: Func): StoreType<T> {
     }
 
     function setIsDispatching(dispatchState: boolean) {
-        isDispatching = dispatchState
+        isDispatching = dispatchState;
     }
 
     const store = {

@@ -23,3 +23,7 @@ export interface HooksStoreType<T = any> {
     getStoreLoading: () => boolean;
     reset: () => void;
 }
+
+export interface Options {
+    withLocalStorage?: boolean;
+}
