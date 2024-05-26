@@ -6,6 +6,7 @@ import { strStore } from './store/string'
 import { useSelector } from '@apiknight/store/lib'
 import { useObjValue } from './store/obj'
 import { useAgeValue } from './store/age'
+import FetchShow from './components/FetchShow'
 
 function App() {
   // 纯内核版使用方式，自行维护type,reducer,和更新逻辑，兼容React,Vue,原生等框架
@@ -35,6 +36,7 @@ function App() {
         age: {age}
       </div>
       <Action />
+      <FetchShow />
     </>
   )
 }

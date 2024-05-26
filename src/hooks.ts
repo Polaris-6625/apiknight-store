@@ -46,19 +46,22 @@ const createMapperHooksStore = <Result>(initValue?: Result,options?: any): Hooks
     }
 
     function loadStoreValue(func: Action<Result,Promise<Result>>) {
-        store.setIsDispatching(true)
-        try {
-            func().then((value) => {
+        async function _loadStoreValue() {
+            store.setIsDispatching(true)
+            try {
+                func().then((value) => {
+                    store.setIsDispatching(false)
+                    setStoreValue(value)
+                })
+            }
+            catch (error: any) {
+                throw new Error(error)
+            }
+            finally {
                 store.setIsDispatching(false)
-                setStoreValue(value)
-            })
+            }
         }
-        catch (error: any) {
-            throw new Error(error)
-        }
-        finally {
-            store.setIsDispatching(false)
-        }
+        return _loadStoreValue
     }
 
     function getStoreValue() {
