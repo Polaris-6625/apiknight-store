@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { numStore } from "../store/num";
 import { strStore } from "../store/string";
 import { setObjValue, useObjValue } from "../store/obj";
-import { setAgeValue } from "../store/age";
+import { setAgeValue, useAgeValue } from "../store/age";
 
 function Action() {
     const handleNumClick = useCallback((count: number) => {
@@ -21,6 +21,7 @@ function Action() {
             {...obj,hobbies: [...obj.hobbies, hobby]}
         )
     },[obj])
+    const testAge = useAgeValue()
     return (
         <div>
             <button onClick={() => {
@@ -43,7 +44,7 @@ function Action() {
             <button onClick={
                 () => setAgeValue(state => state+1)
             }>
-                age ++
+                age ++{testAge}
             </button>
         </div>
     )

@@ -91,11 +91,14 @@ function createStore<T = any>(reducer: Func): StoreType<T> {
     }
 
     function getIsDispatching() {
-        return isDispatching;
+        return loading;
     }
-
+    let loading = isDispatching;
     function setIsDispatching(dispatchState: boolean) {
-        isDispatching = dispatchState;
+        loading = reducer(dispatchState);
+        listeners?.forEach(listener => {
+            listener();
+        });
     }
 
     const store = {
@@ -128,6 +131,7 @@ const useSelector = (store: StoreType, selector: Func) => {
 
     return selectedState;
 }; 
+
 
 function createMapperStore<Params = any,Result = any>(
     {params, result}: {params: Params,result?: Result},

@@ -14,8 +14,10 @@ const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): H
     function setStoreValue(func: Func<Result>): void
     function setStoreValue(value: Result | Func<Result> | undefined) {
         if (typeof value === 'function') {
-            store.setIsDispatching(true)
             try {
+                queueMicrotask(() => {
+                    store.setIsDispatching(true);
+                });
                 store.setIsDispatching(false)
                 store.dispatchSlice((value as Func<Result>))
             }
@@ -27,8 +29,10 @@ const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): H
             }
         }
         else {
-            store.setIsDispatching(true)
             try {
+                queueMicrotask(() => {
+                    store.setIsDispatching(true);
+                });
                 store.setIsDispatching(false)
                 store.dispatchState(value)
             }
@@ -47,8 +51,10 @@ const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): H
 
     function loadStoreValue(func: Action<Result,Promise<Result>>) {
         async function _loadStoreValue() {
-            store.setIsDispatching(true)
             try {
+                queueMicrotask(() => {
+                    store.setIsDispatching(true);
+                });
                 func().then((value) => {
                     store.setIsDispatching(false)
                     setStoreValue(value)
@@ -68,21 +74,19 @@ const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): H
         return store.getState()
     }
 
-    function useStoreLoading() {
-        const [isLoading, setIsLoading] = useState(() => store.getIsDispatching());
 
+    function useStoreLoading() {
+        const [loading, setLoading] = useState(store.getIsDispatching());
         useEffect(() => {
             const callback = () => {
-                setIsLoading(store.getIsDispatching());
+                setLoading(store.getIsDispatching());
             };
             store.subscribe(callback);
-
             return () => {
                 store.unSubscribe(callback)
             };
         }, [store]);
-
-        return isLoading;
+        return loading;
     }
 
     function getStoreLoading() {
