@@ -3,21 +3,20 @@ import { Func, StoreType } from "./type";
 
 function createStore<T = any>(reducer: Func): StoreType<T> {
     let state: T | undefined = void 0;
-    let listeners: Func[] = [];
+    let listeners: Map<Symbol,Func> = new Map();
     let isDispatching = false;
-    function subscribe(callback: Func) {
+    function subscribe(id: Symbol,callback: Func) {
         if (isDispatching) {
             throw new Error("Reducer此时不得派发动作。");
         }
-        listeners.push(callback);
+        listeners.set(id,callback);
     }
 
-    function unSubscribe(func: Func) {
+    function unSubscribe(id: Symbol) {
         if (isDispatching) {
             throw new Error("Reducer此时不得派发动作。");
         }
-        const index = listeners.indexOf(func);
-        listeners.splice(index, 1);
+        listeners.delete(id);
     }
 
     function dispatch(action: any) {
@@ -34,7 +33,7 @@ function createStore<T = any>(reducer: Func): StoreType<T> {
         finally {
             isDispatching = false;
         }
-        listeners?.forEach(listener => {
+        listeners?.forEach((listener) => {
             listener();
         });
     }
@@ -59,7 +58,7 @@ function createStore<T = any>(reducer: Func): StoreType<T> {
         finally {
             isDispatching = false;
         }
-        listeners?.forEach(listener => {
+        listeners?.forEach((listener) => {
             listener();
         });
     }
@@ -78,7 +77,7 @@ function createStore<T = any>(reducer: Func): StoreType<T> {
         finally {
             isDispatching = false;
         }
-        listeners?.forEach(listener => {
+        listeners?.forEach((listener) => {
             listener();
         });
     }
@@ -96,7 +95,7 @@ function createStore<T = any>(reducer: Func): StoreType<T> {
     let loading = isDispatching;
     function setIsDispatching(dispatchState: boolean) {
         loading = reducer(dispatchState);
-        listeners?.forEach(listener => {
+        listeners?.forEach((listener) => {
             listener();
         });
     }
@@ -109,7 +108,8 @@ function createStore<T = any>(reducer: Func): StoreType<T> {
         getIsDispatching,
         setIsDispatching,
         dispatchState,
-        dispatchSlice
+        dispatchSlice,
+        loading
     }
 
     return store;
@@ -117,15 +117,15 @@ function createStore<T = any>(reducer: Func): StoreType<T> {
 
 const useSelector = (store: StoreType, selector: Func) => {
     const [selectedState, setSelectedState] = useState(() => selector(store.getState()));
-
     useEffect(() => {
+        const id = Symbol();
         const callback = () => {
             setSelectedState(selector(store.getState()));
         };
-        store.subscribe(callback);
+        store.subscribe(id,callback);
 
         return () => {
-            store.unSubscribe(callback)
+            store.unSubscribe(id)
         };
     }, [store]);
 
@@ -151,7 +151,7 @@ function createMapperStore<Params = any,Result = any>(
         const stateEntry = map.get(key);
         if (stateEntry) {
             stateEntry.result = reducer(stateEntry.result, action);
-            stateEntry.listeners.forEach(listener => {
+            stateEntry.listeners.forEach((listener) => {
                 listener();
             });
         } else {

@@ -13,8 +13,9 @@ function App() {
   // 纯内核版使用方式，自行维护type,reducer,和更新逻辑，兼容React,Vue,原生等框架
   const [num, setNum] = useState<number | undefined>(numStore.getState() || 0)
   // 添加一个回调，记得销毁
+  const id = Symbol()
   numStore.subscribe(() => {
-      setNum(numStore.getState())
+      setNum(id,numStore.getState())
   })
   // 基础内核版+react-hooks,使用示例,不推荐使用,不需要维护回调，自动同步
   const str = useSelector(strStore,state => state)

@@ -5,11 +5,11 @@ export type Action<T = any, V = any> = (...args: T[]) => V;
 export type FuncPromise = () => Promise<void>;
 
 export interface StoreType<T = any> {
-    subscribe: (callback: Func) => void;
+    subscribe: (id:Symbol,callback: Func) => void;
     dispatch: (action?: any) => void;
     dispatchState: (state: T | Func) => void;
     getState: () => T | undefined;
-    unSubscribe: (callback: Func) => void;
+    unSubscribe: (id: Symbol) => void;
     getIsDispatching: () => boolean;
     setIsDispatching: (e: boolean) => void;
     dispatchSlice: (slice: Func) => void;

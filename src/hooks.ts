@@ -15,32 +15,22 @@ const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): H
     function setStoreValue(value: Result | Func<Result> | undefined) {
         if (typeof value === 'function') {
             try {
-                queueMicrotask(() => {
-                    store.setIsDispatching(true);
-                });
-                store.setIsDispatching(false)
+                store.setIsDispatching(true);
                 store.dispatchSlice((value as Func<Result>))
+                store.setIsDispatching(false)
             }
             catch (error: any) {
                 throw new Error(error)
-            }
-            finally {
-                store.setIsDispatching(false)
             }
         }
         else {
             try {
-                queueMicrotask(() => {
-                    store.setIsDispatching(true);
-                });
-                store.setIsDispatching(false)
-                store.dispatchState(value)
+                store.setIsDispatching(true);
+                store.dispatchState(value);
+                store.setIsDispatching(false);
             }
             catch (error: any) {
                 throw new Error(error)
-            }
-            finally {
-                store.setIsDispatching(false)
             }
         }
     }
@@ -81,9 +71,10 @@ const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): H
             const callback = () => {
                 setLoading(store.getIsDispatching());
             };
-            store.subscribe(callback);
+            const id = Symbol();
+            store.subscribe(id,callback);
             return () => {
-                store.unSubscribe(callback)
+                store.unSubscribe(id)
             };
         }, [store]);
         return loading;
