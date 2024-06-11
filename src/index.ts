@@ -1,8 +1,35 @@
 import { useEffect, useState } from "react";
-import { Func, StoreType } from "./type";
+import { Func, Options, StoreType } from "./type";
 
-function createStore<T = any>(reducer: Func): StoreType<T> {
+const getChangeType = (currentType: string,value: any) => {
+    switch (currentType) {
+        case "string":
+            return String(value);
+        case "number":
+            return Number(value);
+        case "boolean":
+            return Boolean(value);
+        default:
+            return value;
+    }
+}
+
+function createStore<T = any>(reducer: Func,options?: Options): StoreType<T> {
+    const loaclStr = localStorage.getItem(options?.withLocalStorage || "");
     let state: T | undefined = void 0;
+    if (loaclStr != null) {
+        let data = void 0;
+        if (loaclStr?.startsWith("{")) {
+            data = JSON.parse(loaclStr?.split("}:")[0]+ "}");
+        }
+        else if (loaclStr?.startsWith("[")) {
+            data = JSON.parse(loaclStr?.split("]:")[0]+ "]");
+        }
+        else {
+            data = getChangeType(loaclStr?.split(":")[1], loaclStr?.split(":")[0]);
+        }
+        state = data;
+    }
     let listeners: Map<Symbol,Func> = new Map();
     let isDispatching = false;
     function subscribe(id: Symbol,callback: Func) {
@@ -26,6 +53,9 @@ function createStore<T = any>(reducer: Func): StoreType<T> {
         try {
             isDispatching = true;
             state = reducer(state, action);
+            if (options != null && options?.withLocalStorage !== "") {
+                localStorage.setItem(options?.withLocalStorage as string, JSON.stringify(state) + `:${typeof state}`);
+            }
         }
         catch (error) {
             throw error;
@@ -45,12 +75,14 @@ function createStore<T = any>(reducer: Func): StoreType<T> {
         try {
             if (typeof state === "function") {
                 state = (value as Func)();
-                isDispatching = true;
             }
             else {
                 state = reducer(value);
-                isDispatching = true;
             }
+            if (options != null && options?.withLocalStorage !== "") {
+                localStorage.setItem(options?.withLocalStorage as string, JSON.stringify(state) + `:${typeof state}`);
+            }
+            isDispatching = true;
         }
         catch (error) {
             throw error;
@@ -70,6 +102,9 @@ function createStore<T = any>(reducer: Func): StoreType<T> {
         try {
             state = newReducer(state);
             isDispatching = true;
+            if (options != null && options?.withLocalStorage !== "") {
+                localStorage.setItem(options?.withLocalStorage as string, JSON.stringify(state) + `:${typeof state}`);
+            }
         }
         catch (error) {
             throw error;

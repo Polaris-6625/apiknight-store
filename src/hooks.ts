@@ -4,8 +4,13 @@ import { createStore, useSelector } from "./index"
 
 const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): HooksStoreType<Result> => {
 
-    const store = createStore(e => e)
-    
+    const store = createStore(e => e,options)
+    if (initValue != null && localStorage.getItem(options?.withLocalStorage as string) == null) {
+        setStoreValue(initValue)
+    }
+    else {
+        setStoreValue(store.getState())
+    }
     function useStoreValue() {
         const storeValue = useSelector(store,state => state)
         return storeValue
@@ -33,10 +38,6 @@ const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): H
                 throw new Error(error)
             }
         }
-    }
-
-    if (initValue != null) {
-        setStoreValue(initValue)
     }
 
     function loadStoreValue(func: Action<Result,Promise<Result>>) {
