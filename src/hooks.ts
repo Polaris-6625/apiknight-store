@@ -1,28 +1,30 @@
 import { useEffect, useState } from "react"
-import { Action, Func, HooksStoreType, Options } from "./type"
+import { Action, Func, HooksStoreType, MapperHooksStoreType, Options, StoreType } from "./type"
 import { createStore, useSelector } from "./index"
 
-const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): HooksStoreType<Result> => {
+const createMapperHooksStore = <Key,Result>(initValue?: Result,options?: Options): MapperHooksStoreType<Key,Result> => {
 
-    const store = createStore(e => e,options)
-    if (initValue != null && localStorage.getItem(options?.withLocalStorage as string) == null) {
-        setStoreValue(initValue)
-    }
-    else {
-        setStoreValue(store.getState())
-    }
-    function useStoreValue() {
-        const storeValue = useSelector(store,state => state)
+    const store = createStore(e => e,initValue,options)
+    const storeMap = new Map<Key,Result>();
+    // if (initValue != null && localStorage.getItem(options?.withLocalStorage as string) == null) {
+    //     setStoreValue(0,initValue)
+    // }
+    // else {
+    //     setStoreValue(0,store.getState())
+    // }
+    function useStoreValue(key: Key) {
+        const storeValue = useSelector(storeMap.get(key) as StoreType,state => state)
         return storeValue
     }
-    function setStoreValue(value: Result | undefined): void
-    function setStoreValue(func: Func<Result>): void
-    function setStoreValue(value: Result | Func<Result> | undefined) {
+    function setStoreValue(key: Key,value: Result | undefined): void
+    function setStoreValue(key: Key,func: Func<Result>): void
+    function setStoreValue(key: Key,value: Result | Func<Result> | undefined) {
         if (typeof value === 'function') {
             try {
-                store.setIsDispatching(true);
-                store.dispatchSlice((value as Func<Result>))
-                store.setIsDispatching(false)
+                const currentStore = storeMap.get(key) as StoreType;
+                currentStore.setIsDispatching(true);
+                currentStore.dispatchSlice((value as Func<Result>))
+                currentStore.setIsDispatching(false)
             }
             catch (error: any) {
                 throw new Error(error)
@@ -30,9 +32,10 @@ const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): H
         }
         else {
             try {
-                store.setIsDispatching(true);
-                store.dispatchState(value);
-                store.setIsDispatching(false);
+                const currentStore = storeMap.get(key) as StoreType;
+                currentStore.setIsDispatching(true);
+                currentStore.dispatchState(value);
+                currentStore.setIsDispatching(false);
             }
             catch (error: any) {
                 throw new Error(error)
@@ -40,15 +43,16 @@ const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): H
         }
     }
 
-    function loadStoreValue(func: Action<Result,Promise<Result>>) {
+    function loadStoreValue(key: Key,func: Action<Result,Promise<Result>>) {
         async function _loadStoreValue() {
             try {
+                const currentStore = storeMap.get(key) as StoreType;
                 queueMicrotask(() => {
-                    store.setIsDispatching(true);
+                    currentStore.setIsDispatching(true);
                 });
                 func().then((value) => {
-                    store.setIsDispatching(false)
-                    setStoreValue(value)
+                    currentStore.setIsDispatching(false)
+                    setStoreValue(key,value)
                 })
             }
             catch (error: any) {
@@ -61,33 +65,34 @@ const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): H
         return _loadStoreValue
     }
 
-    function getStoreValue() {
-        return store.getState()
+    function getStoreValue(key: Key) {
+        return (storeMap.get(key) as StoreType).getState()
     }
 
 
-    function useStoreLoading() {
-        const [loading, setLoading] = useState(store.getIsDispatching());
+    function useStoreLoading(key: Key) {
+        const currentStore = storeMap.get(key) as StoreType;
+        const [loading, setLoading] = useState(currentStore.getIsDispatching());
         useEffect(() => {
             const callback = () => {
-                setLoading(store.getIsDispatching());
+                setLoading(currentStore.getIsDispatching());
             };
             const id = Symbol();
-            store.subscribe(id,callback);
+            currentStore.subscribe(id,callback);
             return () => {
-                store.unSubscribe(id)
+                currentStore.unSubscribe(id)
             };
-        }, [store]);
+        }, [currentStore]);
         return loading;
     }
 
-    function getStoreLoading() {
-        return store.getIsDispatching()
+    function getStoreLoading(key: Key) {
+        return (storeMap.get(key) as StoreType).getIsDispatching()
     }
 
 
-    function reset() {
-        setStoreValue(initValue)
+    function reset(key: Key) {
+        setStoreValue(key,initValue)
     }
     return {
         useStoreValue,
@@ -100,4 +105,31 @@ const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): H
     }
 }
 
-export { createMapperHooksStore }
+const createHooksStore = <Result>(initValue?: Result,options?: Options): HooksStoreType<Result> => {
+    const mapperStore = createMapperHooksStore<Number,Result>(initValue,options);
+    return {
+        useStoreValue: function() {
+            return mapperStore.useStoreValue(0);
+        },
+        setStoreValue: function(value: Result | Func<Result> | undefined) {
+            return mapperStore.setStoreValue(0,value as any)
+        },
+        loadStoreValue: function(func: Action) {
+            return mapperStore.loadStoreValue(0,func)
+        },
+        getStoreValue: function() {
+            return mapperStore.getStoreValue(0)
+        },
+        useStoreLoading: function() {
+            return mapperStore.useStoreLoading(0)
+        },
+        getStoreLoading: function() {
+            return mapperStore.getStoreLoading(0);
+        },
+        reset: function() {
+            mapperStore.reset(0)
+        }
+    }
+}
+
+export { createMapperHooksStore , createHooksStore }
