@@ -1,4 +1,4 @@
-import {createMapperHooksStore} from "@apiknight/store/lib/hooks"
+import {createHooksStore} from "@apiknight/store/lib/hooks"
 
 /*
 
@@ -6,7 +6,7 @@ import {createMapperHooksStore} from "@apiknight/store/lib/hooks"
 
 */
 
-const ageStore = createMapperHooksStore<number>(0,{withLocalStorage: 'age'})
+const ageStore = createHooksStore<number>(0,{withLocalStorage: 'age'})
 
 export const useAgeValue = ageStore.useStoreValue
 

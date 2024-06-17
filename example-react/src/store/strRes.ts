@@ -1,7 +1,7 @@
-import { createMapperHooksStore } from "@apiknight/store/lib/hooks";
+import { createHooksStore } from "@apiknight/store/lib/hooks";
 
 
-const strRes = createMapperHooksStore<string>('',{withLocalStorage: 'user'});
+const strRes = createHooksStore<string>('',{withLocalStorage: 'user'});
 
 export const useStrRes = strRes.useStoreValue
 
