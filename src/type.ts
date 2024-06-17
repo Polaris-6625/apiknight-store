@@ -14,6 +14,16 @@ export interface StoreType<T = any> {
     setIsDispatching: (e: boolean) => void;
     dispatchSlice: (slice: Func) => void;
 }
+export interface MapperHooksStoreType <Key = number,T = any> {
+    useStoreValue: (key: Key) => T;
+    setStoreValue: { (key: Key,value: T | undefined): void; (key: Key,func: Func<T>): void; }
+    loadStoreValue: (key: Key,func: Action) => FuncPromise
+    getStoreValue: (key: Key) => T;
+    useStoreLoading: (key: Key) => boolean;
+    getStoreLoading: (key: Key) => boolean;
+    reset: (key: Key) => void;
+}
+
 export interface HooksStoreType<T = any> {
     useStoreValue: () => T;
     setStoreValue: { (value: T | undefined): void; (func: Func<T>): void; }

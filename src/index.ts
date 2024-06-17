@@ -14,7 +14,7 @@ const getChangeType = (currentType: string,value: any) => {
     }
 }
 
-function createStore<T = any>(reducer: Func,options?: Options): StoreType<T> {
+function createStore<T = any>(reducer: Func,initValue?: T,options?: Options): StoreType<T> {
     const loaclStr = localStorage.getItem(options?.withLocalStorage || "");
     let state: T | undefined = void 0;
     if (loaclStr != null) {
@@ -29,6 +29,9 @@ function createStore<T = any>(reducer: Func,options?: Options): StoreType<T> {
             data = getChangeType(loaclStr?.split(":")[1], loaclStr?.split(":")[0]);
         }
         state = data;
+    }
+    else if (initValue != null) {
+        state = initValue;
     }
     let listeners: Map<Symbol,Func> = new Map();
     let isDispatching = false;

@@ -1,4 +1,4 @@
-import {createMapperHooksStore} from "@apiknight/store/lib/hooks"
+import {createHooksStore, createMapperHooksStore} from "@apiknight/store/lib/hooks"
 
 /*
 
@@ -18,7 +18,7 @@ const initValue = {
     hobbies: ["coding"],
 }
 
-const objStore = createMapperHooksStore<Obj>(initValue)
+const objStore = createMapperHooksStore<number,Obj>(initValue)
 
 export const useObjValue = objStore.useStoreValue
 

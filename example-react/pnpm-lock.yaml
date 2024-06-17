@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@apiknight/store':
-    specifier: 1.4.2
-    version: 1.4.2(less@4.2.0)(typescript@5.4.5)(webpack@5.91.0)
+    specifier: 1.5.4
+    version: 1.5.4(less@4.2.0)(typescript@5.4.5)(webpack@5.91.0)
   react:
     specifier: ^18.2.0
     version: 18.3.1
@@ -49,8 +49,8 @@ devDependencies:
 
 packages:
 
-  /@apiknight/store@1.4.2(less@4.2.0)(typescript@5.4.5)(webpack@5.91.0):
-    resolution: {integrity: sha512-Y+XfxsrrtcL2gJCJono7Ak2L2lz14WCkk67PZevQezmhPBiv1jdpCtMHHOZVD9w7FlgfjSaAPIlZcAY8yOS5AQ==}
+  /@apiknight/store@1.5.4(less@4.2.0)(typescript@5.4.5)(webpack@5.91.0):
+    resolution: {integrity: sha512-vSdhyk6b8XcV9NKPcnHhN3tEqm/J3cCXtNWyTteOvAMy9G7ZyQ2W51xVr7fTFyjw2kahH2eL29brNrSyYYMmHA==}
     dependencies:
       '@types/react': 18.3.3
       '@types/react-dom': 18.3.0
