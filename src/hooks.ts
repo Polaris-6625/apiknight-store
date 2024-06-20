@@ -1,37 +1,28 @@
 import { useEffect, useState } from "react"
-import { Action, Func, HooksStoreType, MapperHooksStoreType, Options, StoreType } from "./type"
+import { Action, Func, HooksStoreType, Options } from "./type"
 import { createStore, useSelector } from "./index"
 
-const createMapperHooksStore = <Key,Result>(initValue?: Result,options?: Options): MapperHooksStoreType<Key,Result> => {
+const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): HooksStoreType<Result> => {
 
-<<<<<<< HEAD
-    const store = createStore(e => e,initValue,options)
-    const storeMap = new Map<Key,Result>();
-    // if (initValue != null && localStorage.getItem(options?.withLocalStorage as string) == null) {
-    //     setStoreValue(0,initValue)
-    // }
-    // else {
-    //     setStoreValue(0,store.getState())
-    // }
-    function useStoreValue(key: Key) {
-        const storeValue = useSelector(storeMap.get(key) as StoreType,state => state)
-=======
-    const store = createStore(e => e)
-    
+    const store = createStore(e => e,options)
+    if (initValue != null && localStorage.getItem(options?.withLocalStorage as string) == null) {
+        setStoreValue(initValue)
+    }
+    else {
+        setStoreValue(store.getState())
+    }
     function useStoreValue() {
         const storeValue = useSelector(store,state => state)
->>>>>>> parent of df9f366 (feat: 增加localstorage存储能力)
         return storeValue
     }
-    function setStoreValue(key: Key,value: Result | undefined): void
-    function setStoreValue(key: Key,func: Func<Result>): void
-    function setStoreValue(key: Key,value: Result | Func<Result> | undefined) {
+    function setStoreValue(value: Result | undefined): void
+    function setStoreValue(func: Func<Result>): void
+    function setStoreValue(value: Result | Func<Result> | undefined) {
         if (typeof value === 'function') {
             try {
-                const currentStore = storeMap.get(key) as StoreType;
-                currentStore.setIsDispatching(true);
-                currentStore.dispatchSlice((value as Func<Result>))
-                currentStore.setIsDispatching(false)
+                store.setIsDispatching(true);
+                store.dispatchSlice((value as Func<Result>))
+                store.setIsDispatching(false)
             }
             catch (error: any) {
                 throw new Error(error)
@@ -39,10 +30,9 @@ const createMapperHooksStore = <Key,Result>(initValue?: Result,options?: Options
         }
         else {
             try {
-                const currentStore = storeMap.get(key) as StoreType;
-                currentStore.setIsDispatching(true);
-                currentStore.dispatchState(value);
-                currentStore.setIsDispatching(false);
+                store.setIsDispatching(true);
+                store.dispatchState(value);
+                store.setIsDispatching(false);
             }
             catch (error: any) {
                 throw new Error(error)
@@ -50,24 +40,15 @@ const createMapperHooksStore = <Key,Result>(initValue?: Result,options?: Options
         }
     }
 
-<<<<<<< HEAD
-    function loadStoreValue(key: Key,func: Action<Result,Promise<Result>>) {
-=======
-    if (initValue != null) {
-        setStoreValue(initValue)
-    }
-
-    function loadStoreValue(func: Action<Result,Promise<Result>>) {
->>>>>>> parent of df9f366 (feat: 增加localstorage存储能力)
-        async function _loadStoreValue() {
+    function loadStoreValue(params: Func,func: Action<Result,Promise<Result>>) {
+        async function _loadStoreValue(data: any) {
             try {
-                const currentStore = storeMap.get(key) as StoreType;
                 queueMicrotask(() => {
-                    currentStore.setIsDispatching(true);
+                    store.setIsDispatching(true);
                 });
-                func().then((value) => {
-                    currentStore.setIsDispatching(false)
-                    setStoreValue(key,value)
+                func(params(data)).then((value) => {
+                    store.setIsDispatching(false)
+                    setStoreValue(value)
                 })
             }
             catch (error: any) {
@@ -80,34 +61,33 @@ const createMapperHooksStore = <Key,Result>(initValue?: Result,options?: Options
         return _loadStoreValue
     }
 
-    function getStoreValue(key: Key) {
-        return (storeMap.get(key) as StoreType).getState()
+    function getStoreValue() {
+        return store.getState()
     }
 
 
-    function useStoreLoading(key: Key) {
-        const currentStore = storeMap.get(key) as StoreType;
-        const [loading, setLoading] = useState(currentStore.getIsDispatching());
+    function useStoreLoading() {
+        const [loading, setLoading] = useState(store.getIsDispatching());
         useEffect(() => {
             const callback = () => {
-                setLoading(currentStore.getIsDispatching());
+                setLoading(store.getIsDispatching());
             };
             const id = Symbol();
-            currentStore.subscribe(id,callback);
+            store.subscribe(id,callback);
             return () => {
-                currentStore.unSubscribe(id)
+                store.unSubscribe(id)
             };
-        }, [currentStore]);
+        }, [store]);
         return loading;
     }
 
-    function getStoreLoading(key: Key) {
-        return (storeMap.get(key) as StoreType).getIsDispatching()
+    function getStoreLoading() {
+        return store.getIsDispatching()
     }
 
 
-    function reset(key: Key) {
-        setStoreValue(key,initValue)
+    function reset() {
+        setStoreValue(initValue)
     }
     return {
         useStoreValue,
@@ -120,31 +100,4 @@ const createMapperHooksStore = <Key,Result>(initValue?: Result,options?: Options
     }
 }
 
-const createHooksStore = <Result>(initValue?: Result,options?: Options): HooksStoreType<Result> => {
-    const mapperStore = createMapperHooksStore<Number,Result>(initValue,options);
-    return {
-        useStoreValue: function() {
-            return mapperStore.useStoreValue(0);
-        },
-        setStoreValue: function(value: Result | Func<Result> | undefined) {
-            return mapperStore.setStoreValue(0,value as any)
-        },
-        loadStoreValue: function(func: Action) {
-            return mapperStore.loadStoreValue(0,func)
-        },
-        getStoreValue: function() {
-            return mapperStore.getStoreValue(0)
-        },
-        useStoreLoading: function() {
-            return mapperStore.useStoreLoading(0)
-        },
-        getStoreLoading: function() {
-            return mapperStore.getStoreLoading(0);
-        },
-        reset: function() {
-            mapperStore.reset(0)
-        }
-    }
-}
-
-export { createMapperHooksStore , createHooksStore }
+export { createMapperHooksStore }
