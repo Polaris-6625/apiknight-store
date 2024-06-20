@@ -10,7 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@apiknight/store": "1.5.4",
+=======
+    "@apiknight/store": "1.4.1",
+>>>>>>> parent of df9f366 (feat: 增加localstorage存储能力)
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

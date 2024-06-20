@@ -35,5 +35,5 @@ export interface HooksStoreType<T = any> {
 }
 
 export interface Options {
-    withLocalStorage?: string;
+    withLocalStorage?: boolean;
 }

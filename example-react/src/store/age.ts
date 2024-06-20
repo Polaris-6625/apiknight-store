@@ -6,7 +6,11 @@ import {createHooksStore} from "@apiknight/store/lib/hooks"
 
 */
 
+<<<<<<< HEAD
 const ageStore = createHooksStore<number>(0,{withLocalStorage: 'age'})
+=======
+const ageStore = createMapperHooksStore<number>(0)
+>>>>>>> parent of df9f366 (feat: 增加localstorage存储能力)
 
 export const useAgeValue = ageStore.useStoreValue
 

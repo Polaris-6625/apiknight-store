@@ -4,6 +4,7 @@ import { createStore, useSelector } from "./index"
 
 const createMapperHooksStore = <Key,Result>(initValue?: Result,options?: Options): MapperHooksStoreType<Key,Result> => {
 
+<<<<<<< HEAD
     const store = createStore(e => e,initValue,options)
     const storeMap = new Map<Key,Result>();
     // if (initValue != null && localStorage.getItem(options?.withLocalStorage as string) == null) {
@@ -14,6 +15,12 @@ const createMapperHooksStore = <Key,Result>(initValue?: Result,options?: Options
     // }
     function useStoreValue(key: Key) {
         const storeValue = useSelector(storeMap.get(key) as StoreType,state => state)
+=======
+    const store = createStore(e => e)
+    
+    function useStoreValue() {
+        const storeValue = useSelector(store,state => state)
+>>>>>>> parent of df9f366 (feat: 增加localstorage存储能力)
         return storeValue
     }
     function setStoreValue(key: Key,value: Result | undefined): void
@@ -43,7 +50,15 @@ const createMapperHooksStore = <Key,Result>(initValue?: Result,options?: Options
         }
     }
 
+<<<<<<< HEAD
     function loadStoreValue(key: Key,func: Action<Result,Promise<Result>>) {
+=======
+    if (initValue != null) {
+        setStoreValue(initValue)
+    }
+
+    function loadStoreValue(func: Action<Result,Promise<Result>>) {
+>>>>>>> parent of df9f366 (feat: 增加localstorage存储能力)
         async function _loadStoreValue() {
             try {
                 const currentStore = storeMap.get(key) as StoreType;
