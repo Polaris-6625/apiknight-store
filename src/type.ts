@@ -2,7 +2,7 @@ export type Func<T = any> = (...args: T[]) => any;
 
 export type Action<T = any, V = any> = (...args: T[]) => V;
 
-export type FuncPromise = (data: any) => Promise<void>;
+export type FuncPromise<T = any> = (data: T) => Promise<void>;
 
 export interface StoreType<T = any> {
     subscribe: (id:Symbol,callback: Func) => void;
@@ -14,10 +14,10 @@ export interface StoreType<T = any> {
     setIsDispatching: (e: boolean) => void;
     dispatchSlice: (slice: Func) => void;
 }
-export interface HooksStoreType<T = any> {
+export interface HooksStoreType<T = any,Params = any> {
     useStoreValue: () => T;
     setStoreValue: { (value: T | undefined): void; (func: Func<T>): void; }
-    loadStoreValue: (params: Func,func: Action) => FuncPromise
+    loadStoreValue: (params: Func<Params>,func: Action) => FuncPromise<Params>
     getStoreValue: () => T;
     useStoreLoading: () => boolean;
     getStoreLoading: () => boolean;

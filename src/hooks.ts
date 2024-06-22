@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Action, Func, HooksStoreType, Options } from "./type"
 import { createStore, useSelector } from "./index"
 
-const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): HooksStoreType<Result> => {
+const createMapperHooksStore = <Result = any,T = any>(initValue?: Result,options?: Options): HooksStoreType<Result,T> => {
 
     const store = createStore(e => e,options)
     if (initValue != null && localStorage.getItem(options?.withLocalStorage as string) == null) {
@@ -40,8 +40,8 @@ const createMapperHooksStore = <Result>(initValue?: Result,options?: Options): H
         }
     }
 
-    function loadStoreValue(params: Func,func: Action<Result,Promise<Result>>) {
-        async function _loadStoreValue(data: any) {
+    function loadStoreValue(params: Func<T>,func: Action<Result,Promise<Result>>) {
+        async function _loadStoreValue(data: T) {
             try {
                 queueMicrotask(() => {
                     store.setIsDispatching(true);
