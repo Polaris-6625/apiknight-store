@@ -5,11 +5,23 @@ import { createStore, useSelector } from "./index"
 const createMapperHooksStore = <Result = any,T = any>(initValue?: Result,options?: Options): HooksStoreType<Result,T> => {
 
     const store = createStore(e => e,options)
-    if (initValue != null && localStorage.getItem(options?.withLocalStorage as string) == null) {
-        setStoreValue(initValue)
+    let hasLocalStorage = false;
+    if (typeof localStorage !== 'undefined') {
+        hasLocalStorage = true;
+    }
+    else if (options?.withLocalStorage != null) {
+        throw new Error("当前环境不支持loaclStorage");
+    }
+    if (hasLocalStorage) {
+        if (initValue != null && localStorage.getItem(options?.withLocalStorage as string) == null) {
+            setStoreValue(initValue)
+        }
+        else {
+            setStoreValue(store.getState())
+        }
     }
     else {
-        setStoreValue(store.getState())
+        setStoreValue(initValue);
     }
     function useStoreValue() {
         const storeValue = useSelector(store,state => state)

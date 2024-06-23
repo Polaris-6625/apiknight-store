@@ -15,7 +15,17 @@ const getChangeType = (currentType: string,value: any) => {
 }
 
 function createStore<T = any>(reducer: Func,options?: Options): StoreType<T> {
-    const loaclStr = localStorage.getItem(options?.withLocalStorage || "");
+
+    const hasLocalStorage = typeof localStorage !== "undefined";
+
+    if (options?.withLocalStorage != null && !hasLocalStorage) {
+        throw new Error("当前环境不支持loaclStorage");
+    }
+
+    const loaclStr = options?.withLocalStorage != null 
+        ?  localStorage.getItem(options?.withLocalStorage || "")
+        : null;
+    
     let state: T | undefined = void 0;
     if (loaclStr != null) {
         let data = void 0;
