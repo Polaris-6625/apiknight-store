@@ -1,12 +1,11 @@
 # 一种全新的store库
 
-- 基础能力版，采用ts实现的发布订阅，兼容vue,reack,原生js等框架。
-
-- react-hooks+基础能力版，提供hooks，更方便的监听state的变化。**（更推荐使用下一种）**
-
-- 最推荐的方式（React hooks可用），提供了大量React hooks，不再需要维护type和reducer，可以实现类似useState,setState式的使用方式 **推荐**
+重新了Redux核心，同时提供了大量React hooks，以一种新思路来管理状态，不再需要维护type和reducer，可以实现类似useState,setState式的使用方式。
+同时具备了异步更新能力和持久化存储能力，同时采用ts开发，具备了完善的类型提示。
 
 ## 文档
+
+下面是React Hooks的使用文档，vue，原生等使用文档暂未更新
 
 ### 安装
 
@@ -16,95 +15,17 @@ npm install @apiknight/store --save
 
 ```
 
-### 基础版本（不提供hooks）
+### 使用方式
+要求:
+- React Hooks版本
+- 如果需要本地持久化存储，需要在有loaclStorage的环境下使用（例如React native可以使用这个库，但是无法使用本地持久化能力）
 
-因为这种写法没有使用hooks，所以需要手动维护type和reducer。兼容vue,react,原生js等框架。
+#### 入门
 
-通过 `createStore` 创建 store:
-
-```ts
-
-import { createStore } from "@apiknight/store/lib/index";
-
-const initState = 0;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function reducer(state = initState, action: any) {
-  switch (action.type) {
-    case 'add':
-      return state + 1;
-    case 'minus':
-      return state - 1;
-  }
-}
-
-const numStore = createStore<number>(reducer);
-
-export {numStore};
-
-```
-
-其中,`<T>`中指定类型,`initState` 指定初始值，可选，默认值是 `undefined`，`reducer` 指定 reducer 函数。
-
-`createStore` 返回一个 store，它包含以下属性：
-
-- `getState()`：返回当前state。
-- `dispatch(action: Action)`：分发 action，触发 reducer 函数。
-- `subscribe(listener: () => void)`：注册监听器，当 state 发生变化时，自动调用 listener。
-- `unsubcribe`: 取消监听器。
-
-因为内核没有提供定制化的hooks，所以不仅需要手动维护type和reducer，对于监听等操作还需要使用`subscribe`来注册回调。
-
-
-### 使用方式二
-
-针对键值对类型的state，可以使用`createMapperStore()`创建store。
+使用上类似React Hooks中的useState。可以使用use订阅信息,使用set修改信息。其中,set可以传递数值或者回调
 
 ```tsx
-
-import { createMapperStore } from "@apiknight/store/lib/index";
-
-const initState = 0;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function reducer(state = initState, action: any) {
-  switch (action.type) {
-    case 'add':
-      return state + 1;
-    case 'minus':
-      return state - 1;
-  }
-}
-
-const mapperNumStore = createMapperStore<number,number>({params: 1,result: initState}, reducer);
-
-export {mapperNumStore};
-
-```
-
-### 对于React-hooks版本
-
-
-我们还额外提供了`useSelector()`这个hooks，可以用来监听state的变化, 返回当前state。
-
-```tsx
-
-const numStoreValue = useSelector(numStore,state => state);
-
-```
-
-mapper结果使用方式与`createStore()`一致。不过hooks是：`useMapperSelector`
-
-```tsx
-
-const numStoreValue = useMapperSelector<number,number>(mapperNumStore,1,state => state);
-
-```
-
-### 最推荐的方式（React hooks可用）
-
-```tsx
-
+// 创建num.ts这个store
 import { createMapperHooksStore } from '@apiknight/store/lib/hooks'
 
 const numStore = createMapperHooksStore<number>(0)
@@ -112,5 +33,72 @@ const numStore = createMapperHooksStore<number>(0)
 export const useNum = numStore.useStoreValue // 监听state变化
 
 export const setNum = numStore.setStoreValue // 修改state，支持value或者callback
+
+export const resetNum = numStore.reset // 重置state
+
+```
+
+使用这个store
+
+```tsx
+  function App() {
+    const num = useNum(); //订阅num状态
+    const handleClick = useCallback(() => {
+      setNum(value => value + 1);
+    },[])
+    const handleChangeValue = useCallback(
+      () => {
+        setNum(10);
+      },[]
+    )
+    return (
+      <div>
+        {num}
+        <button onClick={
+          handleClick
+        }>+</button>
+        <button onClick={handleChangeValue}>
+          change num 10
+        </button>
+      </div>
+    )
+  }
+
+```
+
+#### 持久化
+
+对于支持loaclStorage的环境，可以使用持久化能力。
+
+```tsx
+  const num = createMapperHooksStore<number>(0, {withLocalStorage: 'keyName'}) // keyName为自定义id
+```
+
+#### 异步更新能力
+
+对于异步更新，可以使用异步更新能力。
+```tsx
+  import { createMapperHooksStore } from "@apiknight/store/lib/hooks";
+  import fetchCurrentPageContent from "../api/fetchCurrentPageContent";
+  import { PageDataParams } from "../type/params";
+
+  export interface PageData {
+      id: number;
+      title: string;
+      content: string;
+  }
+
+
+  const pageDataStore = createMapperHooksStore<string,PageDataParams>('', { withLocalStorage: 'page-data-new' });
+
+  export const usePageData = pageDataStore.useStoreValue; // 订阅state变化
+
+  export const usePageDataLoading = pageDataStore.useStoreLoading; // 订阅Loding状态
+
+  // 异步更新，支持传入参数
+  export const loadPageData = pageDataStore.loadStoreValue(
+      params => params,
+      fetchCurrentPageContent
+  );
 
 ```
