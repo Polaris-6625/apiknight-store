@@ -12,7 +12,7 @@
 ```bash
 
 npm install @apiknight/store --save
-
+·
 ```
 
 ### 使用方式
@@ -100,5 +100,38 @@ export const resetNum = numStore.reset // 重置state
       params => params,
       fetchCurrentPageContent
   );
+
+```
+
+#### loading订阅
+
+对于异步更新，可以使用loading订阅。
+
+```tsx
+
+import { createMapperHooksStore } from "@apiknight/store/lib/index";
+import fetchCurrentPageContent from "../api/fetchCurrentPageContent";
+import { PageDataParams } from "../type/params";
+
+export interface PageData {
+    id: number;
+    title: string;
+    content: string;
+}
+
+
+const pageDataStore = createMapperHooksStore<string,PageDataParams>('', { withLocalStorage: 'page-data-new' });
+
+export const usePageData = pageDataStore.useStoreValue;
+// 订阅Loding状态
+export const usePageDataLoading = pageDataStore.useStoreLoading;
+
+export const loadPageData = pageDataStore.loadStoreValue(
+    params => params,
+    fetchCurrentPageContent
+);
+
+// 使用
+const loading = usePageDataLoading();
 
 ```
