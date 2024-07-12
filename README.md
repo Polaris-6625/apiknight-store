@@ -26,7 +26,7 @@ npm install @apiknight/store --save
 
 ```tsx
 // 创建num.ts这个store
-import { createMapperHooksStore } from '@apiknight/store/lib/hooks'
+import { createMapperHooksStore } from '@apiknight/store'
 
 const numStore = createMapperHooksStore<number>(0)
 
@@ -78,7 +78,7 @@ export const resetNum = numStore.reset // 重置state
 
 对于异步更新，可以使用异步更新能力。
 ```tsx
-  import { createMapperHooksStore } from "@apiknight/store/lib/hooks";
+  import { createMapperHooksStore } from "@apiknight/store";
   import fetchCurrentPageContent from "../api/fetchCurrentPageContent";
   import { PageDataParams } from "../type/params";
 

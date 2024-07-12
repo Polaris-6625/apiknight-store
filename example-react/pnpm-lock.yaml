@@ -6,13 +6,8 @@ settings:
 
 dependencies:
   '@apiknight/store':
-<<<<<<< HEAD
-    specifier: 1.5.4
-    version: 1.5.4(less@4.2.0)(typescript@5.4.5)(webpack@5.91.0)
-=======
-    specifier: 1.4.1
-    version: 1.4.1(less@4.2.0)(typescript@5.4.5)(webpack@5.91.0)
->>>>>>> parent of df9f366 (feat: 增加localstorage存储能力)
+    specifier: 1.6.8
+    version: 1.6.8(less@4.2.0)(typescript@5.4.5)(webpack@5.91.0)
   react:
     specifier: ^18.2.0
     version: 18.3.1
@@ -54,13 +49,8 @@ devDependencies:
 
 packages:
 
-<<<<<<< HEAD
-  /@apiknight/store@1.5.4(less@4.2.0)(typescript@5.4.5)(webpack@5.91.0):
-    resolution: {integrity: sha512-vSdhyk6b8XcV9NKPcnHhN3tEqm/J3cCXtNWyTteOvAMy9G7ZyQ2W51xVr7fTFyjw2kahH2eL29brNrSyYYMmHA==}
-=======
-  /@apiknight/store@1.4.1(less@4.2.0)(typescript@5.4.5)(webpack@5.91.0):
-    resolution: {integrity: sha512-XuQrADtagVxIUp6xt6Rjjh0FSfI727fzpg/QRezc2Kyq5UcERy6Bq/0C7sYqnWVltOMGZ8FwvmcGXTY+JW5/Ww==}
->>>>>>> parent of df9f366 (feat: 增加localstorage存储能力)
+  /@apiknight/store@1.6.8(less@4.2.0)(typescript@5.4.5)(webpack@5.91.0):
+    resolution: {integrity: sha512-oiK6kHVm3WPc1azrF7e4K9iC+E07whuUSLEIy0+C8UtNQxSTkFbY5Wvqh6eXZLbwFrIdU99KNU5yG7TkfmeaxQ==}
     dependencies:
       '@types/react': 18.3.3
       '@types/react-dom': 18.3.0

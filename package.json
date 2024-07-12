@@ -1,8 +1,8 @@
 {
   "name": "@apiknight/store",
-  "version": "1.6.7",
-  "description": "",
-  "main": "index.js",
+  "version": "1.6.8",
+  "description": "a store for react",
+  "main": "lib/index.js",
   "private": false,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,9 +14,9 @@
     "pre": "npx webpack serve --mode production --open",
     "dev:vue3": "npx webpack serve --mode development-vue"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "repository": "github:regionjs/region-core",
+  "license": "MIT",
+  "author": "liuyuyang <2281487673@qq.com>",
   "devDependencies": {
     "@babel/core": "^7.23.6",
     "@babel/preset-env": "^7.23.6",

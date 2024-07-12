@@ -1,6 +1,6 @@
 node_modules/
 lib/
-exmaple-node/
-example-react/
+exmaple-node/node_modules/
+example-react/node_modules/
 example-vue/
 README.md
