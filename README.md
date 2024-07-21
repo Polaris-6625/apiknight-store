@@ -56,7 +56,9 @@ export const resetNum = numStore.reset // 重置state
         {num}
         <button onClick={
           handleClick
-        }>+</button>
+        }>
+          +
+        </button>
         <button onClick={handleChangeValue}>
           change num 10
         </button>
@@ -81,13 +83,6 @@ export const resetNum = numStore.reset // 重置state
   import { createMapperHooksStore } from "@apiknight/store";
   import fetchCurrentPageContent from "../api/fetchCurrentPageContent";
   import { PageDataParams } from "../type/params";
-
-  export interface PageData {
-      id: number;
-      title: string;
-      content: string;
-  }
-
 
   const pageDataStore = createMapperHooksStore<string,PageDataParams>('', { withLocalStorage: 'page-data-new' });
 
@@ -135,3 +130,14 @@ export const loadPageData = pageDataStore.loadStoreValue(
 const loading = usePageDataLoading();
 
 ```
+
+### Todo
+
+- 完善文档
+
+- 对于ReactNaitve，小程序的本地持久化支持
+
+- 更好的错误提示
+
+- 测试用例的完善
+
