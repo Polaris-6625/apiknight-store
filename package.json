@@ -1,6 +1,6 @@
 {
   "name": "@apiknight/store",
-  "version": "1.6.9",
+  "version": "1.7.1",
   "description": "a store for react",
   "main": "lib/index.js",
   "private": false,
